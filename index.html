@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#111c22">
+<title>酒駕？別上路｜公路小遊戲</title>
+<style>
+:root{color-scheme:dark;--cream:#fff5d8;--orange:#ffbc42;--mint:#a8efc0;--ink:#142126}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111c22;font-family:ui-rounded,"Noto Sans TC",system-ui,sans-serif;color:var(--cream);touch-action:none}
+#game{position:relative;width:100%;height:100dvh;min-height:500px;overflow:hidden;background:linear-gradient(#213e42 0%,#416757 34%,#1b292b 34%,#10191d 100%);isolation:isolate}
+#game:before,#game:after{content:"";position:absolute;top:29%;height:75%;width:16%;background:repeating-linear-gradient(0deg,#456b48 0 32px,#5a7850 32px 55px);opacity:.52;z-index:-1;transform:perspective(120px) rotateX(8deg)}
+#game:before{left:-3%}#game:after{right:-3%}
+#skyline{position:absolute;top:18%;left:0;width:100%;height:19%;opacity:.22;background:linear-gradient(90deg,transparent 0 5%,#b8bf8b 5% 10%,transparent 10% 15%,#b8bf8b 15% 20%,transparent 20% 28%,#b8bf8b 28% 32%,transparent 32% 37%,#b8bf8b 37% 44%,transparent 44% 53%,#b8bf8b 53% 59%,transparent 59% 66%,#b8bf8b 66% 72%,transparent 72% 79%,#b8bf8b 79% 86%,transparent 86% 91%,#b8bf8b 91% 96%,transparent 96%);clip-path:polygon(0 40%,5% 40%,5% 0,11% 0,11% 55%,16% 55%,16% 20%,23% 20%,23% 63%,31% 63%,31% 10%,37% 10%,37% 51%,44% 51%,44% 27%,50% 27%,50% 66%,58% 66%,58% 4%,65% 4%,65% 49%,73% 49%,73% 18%,80% 18%,80% 59%,87% 59%,87% 0,93% 0,93% 48%,100% 48%,100% 100%,0 100%)}
+.road{position:absolute;top:30%;bottom:-10%;left:50%;width:min(100vw,650px);transform:translateX(-50%);background:linear-gradient(90deg,#242a2c,#353a3a 6%,#484c4b 50%,#353a3a 94%,#242a2c);clip-path:polygon(32% 0,68% 0,100% 100%,0 100%);overflow:hidden}
+.road:before,.road:after{content:"";position:absolute;top:-40%;height:150%;width:5px;background:repeating-linear-gradient(to bottom,#f6d785 0 38px,transparent 38px 76px);animation:roadline .5s linear infinite;opacity:.92}
+.road:before{left:33%}.road:after{right:33%}
+.edge{position:absolute;top:-5%;bottom:0;width:4px;background:repeating-linear-gradient(to bottom,#fff1d0 0 23px,transparent 23px 47px);opacity:.48}.edge.l{left:12%}.edge.r{right:12%}
+@keyframes roadline{to{background-position-y:76px}}
+#world{position:absolute;inset:0;transform-origin:center;transition:filter .3s}
+.hud{position:absolute;inset:0 0 auto;padding:calc(env(safe-area-inset-top) + 16px) 17px 0;display:flex;justify-content:space-between;align-items:flex-start;z-index:5;pointer-events:none}
+.brand{font-size:12px;letter-spacing:.16em;color:#d2dbb4;font-weight:900;text-shadow:0 2px 6px #0008}.stats{display:flex;gap:8px}.pill{background:#172427d9;border:1px solid #ffffff24;border-radius:16px;padding:9px 12px;min-width:86px;box-shadow:0 5px 20px #0003;text-align:center}.pill small{display:block;font-size:9px;letter-spacing:.12em;color:#aebeb2;font-weight:800}.pill b{display:block;margin-top:2px;color:#fff4d6;font-size:20px;font-variant-numeric:tabular-nums}
+#player{position:absolute;width:clamp(62px,17vw,82px);height:116px;bottom:7%;left:50%;transform:translateX(-50%);z-index:3;filter:drop-shadow(0 10px 8px #0008)}
+.car{width:100%;height:100%;position:relative;border-radius:36% 36% 24% 24% / 22% 22% 16% 16%;background:linear-gradient(90deg,#b94c36 0%,#ed704a 12%,#ffad69 28%,#fa8952 72%,#d35a3e 90%,#a94232 100%);border:3px solid #ffd083;box-shadow:inset 0 -14px 0 #b94736,inset 0 3px 5px #ffe1a1,0 0 0 2px #71382f}
+.car:before{content:"";position:absolute;top:19%;left:15%;width:70%;height:32%;border-radius:38% 38% 12% 12% / 28% 28% 10% 10%;background:linear-gradient(145deg,#d6f1df 0%,#80b8b3 22%,#386873 68%,#203f4b 100%);border:3px solid #ffd083;box-shadow:inset 0 5px 0 #ffffff3a,inset 0 -4px 0 #183941}
+.car:after{content:"";position:absolute;left:11%;right:11%;top:8%;height:8px;border-radius:8px;background:#fff6cf;box-shadow:0 0 8px #fff2ae,0 78px 0 -1px #ff5546,0 78px 8px #ff5546}
+.wheel{position:absolute;z-index:-1;width:12px;height:31px;background:linear-gradient(90deg,#111719,#343b3d 55%,#0b1012);border:1px solid #697072;border-radius:5px;top:23%;box-shadow:0 0 0 1px #141819}.wheel.l{left:-9px}.wheel.r{right:-9px}.wheel.l:after,.wheel.r:after{content:"";position:absolute;top:135%;left:0;width:100%;height:100%;background:inherit;border:inherit;border-radius:inherit}
+#things{position:absolute;inset:0;pointer-events:none}.thing{position:absolute;z-index:2;transform:translate(-50%,-50%);will-change:transform}.traffic{width:54px;height:88px;border-radius:17px 17px 12px 12px;background:linear-gradient(90deg,#53989b,#8bd0b5 24%,#5bb6a1 78%,#397879);border:2px solid #b2e8ca;box-shadow:inset 0 -10px #317976,0 9px 10px #0006}.traffic:before{content:"";position:absolute;top:19%;left:17%;width:66%;height:29%;border-radius:11px 11px 4px 4px;background:#214b55}
+.traffic.red{background:linear-gradient(90deg,#aa4652,#ed7b70 25%,#da6960 75%,#913946);border-color:#ffc1a0}.traffic.red:before{background:#533c45}.traffic:after{content:"";position:absolute;left:12%;right:12%;bottom:12%;height:6px;background:#ffedaa;box-shadow:0 -48px 0 #ffedaa}
+.ped{font-size:38px;filter:drop-shadow(0 4px 4px #0009);line-height:1}.coin{font-size:31px;filter:drop-shadow(0 0 9px #ffce54);animation:coinspin .7s ease-in-out infinite alternate}@keyframes coinspin{to{transform:translate(-50%,-50%) rotateY(60deg) scale(1.08)}}
+.notice{position:absolute;left:50%;top:20%;transform:translate(-50%,-15px);opacity:0;transition:.4s;z-index:6;background:#152427d9;border:1px solid #f9d37888;color:#ffe5a3;padding:10px 16px;border-radius:20px;white-space:nowrap;font-weight:900;font-size:13px;letter-spacing:.05em;pointer-events:none}
+.notice.show{opacity:1;transform:translate(-50%,0)}
+#dizzy{position:absolute;inset:-20%;z-index:4;pointer-events:none;opacity:0;background:repeating-conic-gradient(from 0deg at 50% 50%,#ffd5681b 0 5deg,transparent 5deg 15deg);mix-blend-mode:screen}
+#dizzy:after{content:"暈眩路段";position:absolute;top:24%;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:99px;background:#ed8f4c;color:#fff3c5;font-weight:1000;font-size:13px;letter-spacing:.15em;white-space:nowrap;box-shadow:0 0 30px #ffcc6566}
+#game.dizzy #world{animation:warp .45s ease-in-out infinite alternate;filter:saturate(1.4) contrast(1.1)}#game.dizzy #dizzy{opacity:1;animation:swirl 2s linear infinite}
+@keyframes warp{to{transform:skewX(3deg) scale(1.045) rotate(.7deg);filter:hue-rotate(28deg) blur(.4px)}}@keyframes swirl{to{transform:rotate(360deg)}}
+.overlay{position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:24px;background:linear-gradient(#09131769,#091317b8);backdrop-filter:blur(3px)}
+.card{width:min(100%,360px);background:#fff5d8;color:#1d2b2d;border-radius:28px;padding:25px 24px 23px;text-align:center;box-shadow:0 24px 75px #0008;border:4px solid #ffca65;position:relative;overflow:hidden}
+.eyebrow{font-weight:1000;color:#b75b37;letter-spacing:.2em;font-size:10px}.card h1{font-size:31px;line-height:1.15;margin:8px 0 10px;color:#213536}.card p{font-size:14px;line-height:1.7;margin:8px 0;color:#51605a}.card .sub{font-size:12px;color:#748078}
+button{font:inherit;border:0;cursor:pointer}.start{margin-top:15px;width:100%;padding:15px;border-radius:17px;background:#f1844f;color:#fff8e6;font-weight:1000;font-size:17px;box-shadow:0 5px 0 #bb5738;touch-action:manipulation}.start:active{transform:translateY(3px);box-shadow:0 2px 0 #bb5738}.safe-link{display:inline-block;margin-top:15px;color:#386d71;font-weight:900;font-size:12px;text-decoration:underline}
+.cup-scene{height:136px;position:relative;margin:0 auto 7px;display:flex;justify-content:center;align-items:flex-end}
+.mini-car{position:absolute;bottom:9px;width:142px;height:58px;border-radius:30px 38px 16px 16px;background:linear-gradient(100deg,#db6342,#ff9b62 30%,#f1794d);border:4px solid #ffc46c;box-shadow:inset 0 -8px #b84939;animation:bob 1.2s ease-in-out infinite alternate}
+.mini-car:before{content:"";position:absolute;left:35px;top:-32px;width:76px;height:48px;border-radius:28px 28px 6px 6px;background:#e88a59;border:4px solid #ffc46c}
+.mini-car:after{content:"";position:absolute;left:47px;top:-21px;width:50px;height:23px;border-radius:16px 16px 4px 4px;background:linear-gradient(120deg,#c8e9d7,#41666a)}
+.driver{position:absolute;z-index:2;font-size:35px;left:calc(50% - 14px);top:43px;animation:drink 1.6s ease-in-out infinite}.glass{position:absolute;z-index:3;font-size:25px;left:calc(50% + 17px);top:48px;animation:raise 1.6s ease-in-out infinite}
+.spark{position:absolute;font-size:20px;animation:twinkle 1s ease-in-out infinite alternate}.spark.a{left:22%;top:18px}.spark.b{right:20%;top:35px;animation-delay:.4s}
+@keyframes bob{to{transform:translateY(-4px)}}@keyframes drink{0%,38%,100%{transform:rotate(0)}52%,75%{transform:rotate(-26deg) translateY(-5px)}}@keyframes raise{0%,35%,100%{transform:translate(0,0) rotate(0)}55%,76%{transform:translate(-10px,-20px) rotate(-17deg)}}@keyframes twinkle{to{transform:scale(1.3) rotate(15deg);opacity:.5}}
+.hidden{display:none!important}
+.touch-hint{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 16px);left:50%;transform:translateX(-50%);z-index:5;color:#ffffffbd;font-size:11px;letter-spacing:.08em;white-space:nowrap;text-shadow:0 2px 4px #000;pointer-events:none}
+@media(min-width:600px){.road{width:460px}#player{bottom:8%}.touch-hint{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:2s!important}}
+</style>
+</head>
+<body>
+<main id="game">
+ <div id="world">
+  <div id="skyline"></div><div class="road"><span class="edge l"></span><span class="edge r"></span></div>
+  <div id="things"></div>
+  <div id="player"><div class="car"><span class="wheel l"></span><span class="wheel r"></span></div></div>
+  <div id="dizzy"></div>
+ </div>
+ <header class="hud"><div class="brand">✦ 慢一點，平安到</div><div class="stats"><div class="pill"><small>生存時間</small><b id="time">00:00</b></div><div class="pill"><small>收集金幣</small><b>🪙 <span id="coins">0</span></b></div></div></header>
+ <div id="notice" class="notice">⚠ 暈眩路段・車速提升</div>
+ <div class="touch-hint">左右滑動移動　·　方向鍵也可以</div>
+ <section id="startScreen" class="overlay">
+  <div class="card"><div class="eyebrow">ROAD SAFETY • MINI GAME</div><div class="cup-scene"><span class="spark a">✦</span><span class="spark b">✦</span><div class="mini-car"></div><span class="driver">🧑‍✈️</span><span class="glass">🍺</span></div><h1>酒駕？別上路</h1><p>喝了酒，就把車鑰匙交給清醒的人。<br>上路後左右滑動，避開車輛與行人、收集金幣！</p><p class="sub">每 30 秒進入 10 秒暈眩加速路段。</p><button id="startBtn" class="start">開始上路</button></div>
+ </section>
+ <section id="endScreen" class="overlay hidden"><div class="card"><div class="eyebrow">DRIVE SOBER • ARRIVE SAFE</div><div style="font-size:48px;margin:8px 0">🚦</div><h1>旅程結束</h1><p id="result"></p><p style="font-weight:1000;color:#ad4937;font-size:16px">開車請勿飲酒，並注意道路安全。</p><p class="sub">需要搭車時，請找代駕、計程車或大眾運輸。</p><a class="safe-link" href="https://168.motc.gov.tw/?%C2%A0" target="_blank" rel="noopener">交通安全入口網 ↗</a><button id="againBtn" class="start">再玩一次</button></div></section>
+</main>
+<script>
+(()=>{'use strict';
+const game=document.getElementById('game'), things=document.getElementById('things'), player=document.getElementById('player'), timeEl=document.getElementById('time'), coinsEl=document.getElementById('coins'), startScreen=document.getElementById('startScreen'), endScreen=document.getElementById('endScreen'), notice=document.getElementById('notice');
+let running=false,raf=0,last=0,elapsed=0,coinCount=0,spawnIn=0,items=[],lane=1,targetLane=1,dizzyWas=false;
+const lanes=[.32,.5,.68];
+function layoutX(lane,screenY=.83){const road=document.querySelector('.road').getBoundingClientRect(),g=game.getBoundingClientRect();const t=Math.max(0,Math.min(1,(g.top+game.clientHeight*screenY-road.top)/road.height));const inset=.32*(1-t);const usable=1-2*inset;return road.left+road.width*(inset+usable*(lane+.5)/3)-g.left}
+function setPlayer(){player.style.left=layoutX(targetLane,.84)+'px';}
+function reset(){cancelAnimationFrame(raf);running=false;elapsed=0;coinCount=0;spawnIn=0;items=[];things.innerHTML='';lane=targetLane=1;setPlayer();timeEl.textContent='00:00';coinsEl.textContent='0';game.classList.remove('dizzy');notice.classList.remove('show');dizzyWas=false;startScreen.classList.remove('hidden');endScreen.classList.add('hidden')}
+function start(){reset();startScreen.classList.add('hidden');running=true;last=performance.now();raf=requestAnimationFrame(frame)}
+function fmt(s){const n=Math.floor(s);return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
+function spawn(){const coin=Math.random()<.43;let l=Math.floor(Math.random()*3);if(!coin&&items.some(o=>o.type!=='coin'&&o.lane===l&&o.y<.2))l=(l+1+Math.floor(Math.random()*2))%3;const e=document.createElement('div');e.className='thing '+(coin?'coin':Math.random()<.68?'traffic':'ped');if(coin)e.textContent='🪙';else if(e.classList.contains('ped'))e.textContent=Math.random()<.5?'🚶':'🚴';else if(Math.random()<.4)e.classList.add('red');things.appendChild(e);items.push({el:e,lane:l,y:-.08,type:coin?'coin':'hazard',hit:false})}
+function frame(now){if(!running)return;const dt=Math.min(.04,(now-last)/1000||0);last=now;elapsed+=dt;timeEl.textContent=fmt(elapsed);
+const dizzy=elapsed>=30&&((elapsed-30)%30)<10;if(dizzy!==dizzyWas){game.classList.toggle('dizzy',dizzy);notice.classList.toggle('show',dizzy);dizzyWas=dizzy}const speed=(.31+Math.min(elapsed*.003,.18))*(dizzy?1.7:1);spawnIn-=dt;if(spawnIn<=0){spawn();spawnIn=Math.max(.35,(dizzy?.64:.9)-elapsed*.003)+Math.random()*.25}
+const py=(player.offsetTop+player.offsetHeight/2)/game.clientHeight;for(let i=items.length-1;i>=0;i--){const o=items[i];o.y+=speed*dt;o.el.style.left=layoutX(o.lane,o.y)+'px';o.el.style.top=(game.clientHeight*o.y)+'px';const near=Math.abs(o.y-py)<.075;if(near&&o.lane===targetLane&&!o.hit){o.hit=true;if(o.type==='coin'){coinCount++;coinsEl.textContent=coinCount;o.el.remove();items.splice(i,1);continue}else{die();return}}if(o.y>1.12){o.el.remove();items.splice(i,1)}}raf=requestAnimationFrame(frame)}
+function die(){running=false;cancelAnimationFrame(raf);game.classList.remove('dizzy');notice.classList.remove('show');document.getElementById('result').textContent='你安全行駛了 '+fmt(elapsed)+'，收集 '+coinCount+' 枚金幣。';endScreen.classList.remove('hidden')}
+function move(dir){if(!running)return;targetLane=Math.max(0,Math.min(2,targetLane+dir));lane=targetLane;setPlayer()}
+let sx=0,sy=0;game.addEventListener('touchstart',e=>{if(!running)return;sx=e.changedTouches[0].clientX;sy=e.changedTouches[0].clientY},{passive:true});game.addEventListener('touchend',e=>{if(!running)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>24&&Math.abs(dx)>Math.abs(dy))move(dx>0?1:-1)},{passive:true});window.addEventListener('keydown',e=>{if(['ArrowLeft','a','A'].includes(e.key)){e.preventDefault();move(-1)}if(['ArrowRight','d','D'].includes(e.key)){e.preventDefault();move(1)}if(e.key===' '&&!running&&!endScreen.classList.contains('hidden'))start()});window.addEventListener('resize',setPlayer);document.getElementById('startBtn').addEventListener('click',start);document.getElementById('againBtn').addEventListener('click',start);setPlayer()
+})();
+</script>
+</body></html>
+
+
+
